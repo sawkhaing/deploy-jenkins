@@ -49,14 +49,15 @@ jobs:
           kubectl create namespace jenkins --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
 
-      - name: Deploy Jenkins
-        run: |
-          helm repo add jenkinsci https://charts.jenkins.io
-          helm repo update
-          helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
+      # - name: Deploy Jenkins
+      #   run: |
+      #     helm repo add jenkinsci https://charts.jenkins.io
+      #     helm repo update
+      #     helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
 
       - name: Jenkins LoadBalancer IP
         run: |
           JENKINS_IP=$(kubectl get svc --selector=app.kubernetes.io/name=jenkins -n jenkins -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}")
+          echo $JENKINS_IP
           echo Open http://$JENKINS_IP:8080 from browser
           echo "Username : admin"
