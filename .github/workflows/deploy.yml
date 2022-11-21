@@ -39,6 +39,10 @@ jobs:
         id: install-kubectl
         uses: azure/setup-kubectl@v3
 
+      - name: Setup helm
+        uses: azure/setup-helm@v3
+        id: install
+
       - name: Init
         run: |
           echo "Create Namespace"
@@ -51,17 +55,16 @@ jobs:
           cat $KUBE_CONFIG_PATH
 
       - name: Deploy Jenkins
-        uses: vimeda/helm@v1.6.8
-        # run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
-        with:
-          release: 'jenkins'
-          namespace: 'jenkins'
-          repo: 'https://charts.jenkins.io'
-          repo-alias: 'jenkins'
-          chart: 'jenkinsci/jenkins'
-          value-files: 'jenkins-values.yaml'
-        env:
-          KUBECONFIG_FILE: $KUBE_CONFIG_PATH
+        run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
+        # with:
+        #   release: 'jenkins'
+        #   namespace: 'jenkins'
+        #   repo: 'https://charts.jenkins.io'
+        #   repo-alias: 'jenkins'
+        #   chart: 'jenkinsci/jenkins'
+        #   value-files: 'jenkins-values.yaml'
+        # env:
+        #   KUBECONFIG_FILE: $KUBE_CONFIG_PATH
 
       # - name: Jenkins LoadBalancer IP
       #   run: kubectl get svc --selector=app=istio-ingress -n istio-system -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}"
