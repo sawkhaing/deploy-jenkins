@@ -48,14 +48,19 @@ jobs:
           echo "Create Namespace"
           kubectl create namespace jenkins --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
-      - name: Check ENV
-        run: |
-          env
-          echo $KUBE_CONFIG_PATH
-          cat $KUBE_CONFIG_PATH
+
+      # - name: Check ENV
+      #   run: |
+      #     env
+      #     echo $KUBE_CONFIG_PATH
+      #     cat $KUBE_CONFIG_PATH
 
       - name: Deploy Jenkins
-        run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
+        run: |
+          helm repo add jenkinsci https://charts.jenkins.io
+          helm repo update
+          helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
+
         # with:
         #   release: 'jenkins'
         #   namespace: 'jenkins'
