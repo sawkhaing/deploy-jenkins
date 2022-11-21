@@ -53,5 +53,11 @@ jobs:
           namespace: 'jenkins'
           repo: 'https://charts.jenkins.io'
           repo-alias: jenkins
+          chart: jenkinsci/jenkins
+          value-files: >-
+          [
+            "jenkins-values.yaml"
+          ]
+
       # - name: Jenkins LoadBalancer IP
       #   run: kubectl get svc --selector=app=istio-ingress -n istio-system -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}"
