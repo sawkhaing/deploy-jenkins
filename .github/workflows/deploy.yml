@@ -1,0 +1,57 @@
+name: deploy_jenkins
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout source code 
+        uses: actions/checkout@v3
+
+      - name: Azure login
+        id: login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set AKS context
+        id: set-context
+        uses: azure/aks-set-context@v3
+        with:
+          resource-group: '${{ secrets.resource_group }}' 
+          cluster-name: '${{ secrets.cluster_name }}'
+
+      - name: Setup kubectl
+        id: install-kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Init
+        run: |
+          echo "Create Namespace"
+          kubectl create namespace jenkins
+          kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
+
+      - name: Deploy Jenkins
+        uses: 'deliverybot/helm@v1'
+        # run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
+        with:
+          release: 'jenkins'
+          namespace: 'jenkins'
+          repo: 'https://charts.jenkins.io'
+
+      - name: Jenkins LoadBalancer IP
+        run: kubectl get svc --selector=app=istio-ingress -n istio-system -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}"
