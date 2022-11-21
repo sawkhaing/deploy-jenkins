@@ -44,7 +44,9 @@ jobs:
           echo "Create Namespace"
           kubectl create namespace jenkins --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
-
+      - name: Check ENV
+        run: env
+        
       - name: Deploy Jenkins
         uses: vimeda/helm@v1.6.8
         # run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
