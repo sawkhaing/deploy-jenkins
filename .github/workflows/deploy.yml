@@ -46,7 +46,7 @@ jobs:
           kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
 
       - name: Deploy Jenkins
-        uses: 'deliverybot/helm@v1'
+        uses: vimeda/helm@v1.6.8
         # run: helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins
         with:
           release: 'jenkins'
