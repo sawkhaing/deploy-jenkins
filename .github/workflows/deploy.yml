@@ -45,7 +45,10 @@ jobs:
           kubectl create namespace jenkins --dry-run=client -o yaml | kubectl apply -f -
           kubectl apply -f jenkins-volume.yaml && kubectl apply -f jenkins-sa.yaml
       - name: Check ENV
-        run: env
+        run: |
+          env
+          echo $KUBE_CONFIG_PATH
+          cat $KUBE_CONFIG_PATH
 
       - name: Deploy Jenkins
         uses: vimeda/helm@v1.6.8
@@ -59,5 +62,6 @@ jobs:
           value-files: 'jenkins-values.yaml'
         env:
           KUBECONFIG_FILE: $KUBE_CONFIG_PATH
+
       # - name: Jenkins LoadBalancer IP
       #   run: kubectl get svc --selector=app=istio-ingress -n istio-system -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}"
