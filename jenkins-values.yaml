@@ -245,6 +245,7 @@ controller:
     - configuration-as-code:1569.vb_72405b_80249
     - docker-plugin:1.2.10
     - docker-workflow:528.v7c193a_0b_e67c
+    - ghprb:1.42.2
 
   # Set to false to download the minimum required version of all dependencies.
   installLatestPlugins: true
