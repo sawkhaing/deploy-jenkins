@@ -12,12 +12,15 @@
 
 #### Create Service Account
 <pre><code>kubectl apply -f jenkins-sa.yaml</code></pre>
+RBAC access to the cluster.
 
 #### Install Jenkins with helm
+If want to add more plugins in jenkins-values.yaml https://github.com/sawkhaing/deploy-jenkins/blob/bdbbdf7e9aa52f160c73d98e0e774ccc85e2df84/jenkins-values.yaml#L241-L248
 <pre><code>helm repo add jenkinsci https://charts.jenkins.io</code></pre>
 <pre><code>helm repo update</code></pre>
 <pre><code>helm install jenkins -n jenkins -f jenkins-values.yaml jenkinsci/jenkins</code></pre>
 Jenkins default username "**admin**".
+After installed with helm, wait the jenkins pods to the running state.
 
 #### For Jenkin Password
 <pre><code>jsonpath="{.data.jenkins-admin-password}"
