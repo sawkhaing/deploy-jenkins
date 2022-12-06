@@ -29,7 +29,7 @@ echo $(echo $secret | base64 --decode)</code></pre>
 
 #### Jenkins URL
 <pre><code>JENKINS_IP=$(kubectl get svc --selector=app.kubernetes.io/name=jenkins -n jenkins -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}")</code></pre>
-<pre><code>echo "Jenkins URL http://$JENKINS_IP:8080"</code></pre>
+<pre><code>echo "Jenkins URL http://$JENKINS_IP"</code></pre>
 
 ## For the Automation run from the Github Actions
 Pass the environment variable to deploy jenkins in the desire AKS.

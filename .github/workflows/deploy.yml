@@ -62,5 +62,5 @@ jobs:
       - name: Jenkins LoadBalancer IP
         run: |
           JENKINS_IP=$(kubectl get svc --selector=app.kubernetes.io/name=jenkins -n jenkins -o jsonpath="{.items[0].status.loadBalancer.ingress[0].ip}")
-          echo Open http://$JENKINS_IP:8080 from browser
+          echo Open http://$JENKINS_IP from browser
           echo "Username : admin"
